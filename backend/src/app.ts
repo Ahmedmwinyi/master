@@ -12,9 +12,9 @@ app.get("/health", (req, res) => {
   res.json({ status: "Ok", message: "Server is up and running!" });
 });
 
-app.use("api/auth", authRoutes)
-app.use("api/chat", chatRoutes)
-app.use("api/message", messageRoutes)
-app.use("api/user", userRoutes)
+app.use("/api/auth", authRoutes)
+app.use("/api/chat", chatRoutes)
+app.use("/api/message", messageRoutes)
+app.use("/api/user", userRoutes)
 
 export default app;

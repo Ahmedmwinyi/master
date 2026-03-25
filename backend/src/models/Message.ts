@@ -24,6 +24,7 @@ const MessageSchema = new Schema<IMessage>(
       type: String,
       required: true,
       trim: true,
+      maxlength: 4000,
     },
   },
   { timestamps: true }
