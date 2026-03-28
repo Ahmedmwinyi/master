@@ -10,9 +10,10 @@ import { errorHandler } from "./middleware/errorHandler";
 
 const app = express();
 
+app.use(clerkMiddleware())
+
 app.use(express.json())
 
-app.use(clerkMiddleware())
 
 app.get("/health", (req, res) => {
   res.json({ status: "Ok", message: "Server is up and running!" });

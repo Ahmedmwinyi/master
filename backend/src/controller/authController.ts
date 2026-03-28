@@ -11,9 +11,14 @@ export async function getMe(
   try {
     const userId = req.userId;
 
+    if (!userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
     const user = await User.findById(userId);
 
-    if (!userId) {
+    if (!user) {
       res.status(404).json({ message: "User not found" });
       return;
     }
@@ -25,7 +30,11 @@ export async function getMe(
   }
 }
 
-export async function authCallback(req: AuthRequest, res: Response, next: NextFunction) {
+export async function authCallback(
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const { userId: clerkId } = getAuth(req);
 
