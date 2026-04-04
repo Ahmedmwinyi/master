@@ -8,6 +8,8 @@ const { width, height } = Dimensions.get("window");
 
 const AuthScreen = () => {
   const { handleSocialAuth, loadingStrategy } = useAuthSocial();
+  const isAuthLoading = loadingStrategy !== null;
+
   return (
     <View className="flex-1 bg-surface">
       <View className="absolute inset-0 overflow-hidden">
@@ -50,8 +52,9 @@ const AuthScreen = () => {
               {/* GOOGLE BTN */}
               <Pressable
                 className="flex-1 flex-row items-center justify-center gap-2 bg-white/95 py-4 rounded-2xl active:scale-[0.97]"
-                disabled={loadingStrategy === "oauth_google"}
+                disabled={isAuthLoading}
                 onPress={() => {
+                  if (isAuthLoading) return;
                   handleSocialAuth("oauth_google");
                 }}
               >
@@ -74,8 +77,9 @@ const AuthScreen = () => {
               {/* APPLE BTN */}
               <Pressable
                 className="flex-1 flex-row items-center justify-center gap-2 bg-white/10 py-4 rounded-2xl border border-white/20 active:scale-[0.97]"
-                disabled={loadingStrategy === "oauth_apple"}
+                disabled={isAuthLoading}
                 onPress={() => {
+                  if (isAuthLoading) return;
                   handleSocialAuth("oauth_apple");
                 }}
               >
