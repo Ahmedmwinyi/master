@@ -12,11 +12,23 @@ const api = axios.create({
   },
 });
 
+let interceptorsRegistered = false;
+let currentRequestInterceptor: number | null = null;
+let currentResponseInterceptor: number | null = null;
+
 export const useApi = () => {
   const { getToken } = useAuth();
 
   useEffect(() => {
-    const requestInterceptor = api.interceptors.request.use(async (config) => {
+        // Eject previous interceptors if they exist
+    if (currentRequestInterceptor !== null) {
+      api.interceptors.request.eject(currentRequestInterceptor);
+    }
+    if (currentResponseInterceptor !== null) {
+      api.interceptors.response.eject(currentResponseInterceptor);
+    }
+
+    currentRequestInterceptor = api.interceptors.request.use(async (config) => {
       const token = await getToken();
 
       if (token) {
@@ -25,7 +37,7 @@ export const useApi = () => {
       return config;
     });
 
-    const responseInterceptor = api.interceptors.response.use(
+    currentResponseInterceptor = api.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.response) {
@@ -49,9 +61,10 @@ export const useApi = () => {
       },
     );
 
+     interceptorsRegistered = true;
+
     return () => {
-      api.interceptors.request.eject(requestInterceptor);
-      api.interceptors.response.eject(responseInterceptor);
+      //Only cleanup on final unmount if needed
     };
   }, [getToken]);
   return api;
